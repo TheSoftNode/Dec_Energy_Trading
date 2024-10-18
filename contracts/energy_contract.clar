@@ -46,3 +46,14 @@
     (map-set consumers tx-sender { energy-consumed: u0, total-spent: u0 })
     (print {event: "consumer-registered", consumer: tx-sender})
     (ok true)))
+
+(define-public (update-energy (new-energy uint))
+  (let (
+    (producer-data (unwrap! (get-producer-info tx-sender) (err err-producer-not-found)))
+    (current-energy (get energy-available producer-data))
+    (energy-price (get energy-price producer-data))
+  )
+    (map-set producers tx-sender 
+      { energy-available: (+ current-energy new-energy), energy-price: energy-price })
+    (print {event: "energy-updated", producer: tx-sender, new-total: (+ current-energy new-energy)})
+    (ok true)))
