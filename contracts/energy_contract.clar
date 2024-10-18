@@ -57,3 +57,21 @@
       { energy-available: (+ current-energy new-energy), energy-price: energy-price })
     (print {event: "energy-updated", producer: tx-sender, new-total: (+ current-energy new-energy)})
     (ok true)))
+
+
+;; Admin functions
+(define-public (set-energy-price (producer principal) (new-price uint))
+  (begin
+    (asserts! (is-eq tx-sender contract-owner) (err err-not-owner))
+    (asserts! (> new-price u0) (err err-invalid-amount))
+    (match (map-get? producers producer)
+      producer-data (begin
+        (map-set producers producer 
+          { energy-available: (get energy-available producer-data), energy-price: new-price })
+        (print {event: "price-updated", producer: producer, new-price: new-price})
+        (ok true))
+      (err err-producer-not-found))))
+
+;; Utility functions
+(define-private (min-of (a uint) (b uint))
+  (if (<= a b) a b))
