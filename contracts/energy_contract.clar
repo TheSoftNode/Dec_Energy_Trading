@@ -24,3 +24,9 @@
   (ok (default-to 
     { energy-consumed: u0, total-spent: u0 } 
     (map-get? consumers consumer))))
+
+(define-read-only (get-energy-sold (producer principal))
+  (ok (default-to u0 (map-get? energy-sold producer))))
+
+(define-read-only (get-energy-purchased (consumer principal))
+  (ok (default-to u0 (map-get? energy-purchased consumer))))
