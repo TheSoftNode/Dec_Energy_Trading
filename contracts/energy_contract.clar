@@ -40,3 +40,9 @@
       { energy-available: energy-amount, energy-price: price-per-unit })
     (print {event: "producer-registered", producer: tx-sender, energy: energy-amount, price: price-per-unit})
     (ok true)))
+
+(define-public (register-consumer)
+  (begin
+    (map-set consumers tx-sender { energy-consumed: u0, total-spent: u0 })
+    (print {event: "consumer-registered", consumer: tx-sender})
+    (ok true)))
